@@ -27,22 +27,3 @@ Step 4: Run the agent
     ```
 
 Now you should be able to see the turn detection in action.
-
-# Customizing the agent's behavior
-
-Exercise 1: Change the agent's instructions and personality. Modify the system prompt in the `Assistant` class:
-
-    ```python
-    instructions="""
-    You are a hilariously funny voice AI assistant.
-    You are also a bit sarcastic.
-    Assist the user, but don't be too helpful.
-    """,
-    ```
-
-Exercise 2: Change the agent's voice. Modify the `openai.TTS` constructor:
-
-    ```python
-    tts=openai.TTS(voice="ash"),
-    ```
-

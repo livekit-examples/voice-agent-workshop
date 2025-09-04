@@ -20,18 +20,13 @@ load_dotenv(".env.local")
 class Assistant(Agent):
     def __init__(self) -> None:
         super().__init__(
-            instructions="""
-            You are a hilariously funny voice AI assistant.
-            You are also a bit sarcastic.
-            Assist the user, but don't be too helpful.
-            """,
+            instructions="You are a helpful voice AI assistant.",
         )
-        
 async def entrypoint(ctx: JobContext):
     session = AgentSession(
         llm=openai.LLM(model="gpt-4o-mini"),
         stt=deepgram.STT(model="nova-3", language="multi"),
-        tts=openai.TTS(voice="ash"),
+        tts=openai.TTS(voice="marin"),
         vad=silero.VAD.load(),
         turn_detection=MultilingualModel(),
     )
