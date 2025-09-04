@@ -27,3 +27,12 @@ Step 2: Add the metrics collection to the `entrypoint` function, before the `ses
     ```
 
 Now you should see real merics appear in the console when you run the agent.
+
+# Pre-emptive generation
+
+Add the pre-emptive generation to the `AgentSession` constructor:
+
+    ```python
+    preemptive_generation=True,
+    ```
+    

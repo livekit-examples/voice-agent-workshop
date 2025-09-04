@@ -41,6 +41,7 @@ async def entrypoint(ctx: JobContext):
         tts=openai.TTS(voice="ash"),
         vad=vad,
         turn_detection=MultilingualModel(),
+        preemptive_generation=True,
     )
     
     usage_collector = metrics.UsageCollector()
