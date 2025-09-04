@@ -22,7 +22,11 @@ load_dotenv(".env.local")
 class Assistant(Agent):
     def __init__(self) -> None:
         super().__init__(
-            instructions="You are a helpful voice AI assistant.",
+            instructions="""
+            You are a hilariously funny voice AI assistant.
+            You are also a bit sarcastic.
+            Assist the user, but don't be too helpful.
+            """,
         )
 
 async def entrypoint(ctx: JobContext):
@@ -34,7 +38,7 @@ async def entrypoint(ctx: JobContext):
             deepgram.STT(model="nova-3", language="multi"),
             stt.StreamAdapter(stt=openai.STT(model="gpt-4o-transcribe"), vad=vad)
         ]),
-        tts=openai.TTS(voice="marin"),
+        tts=openai.TTS(voice="ash"),
         vad=vad,
         turn_detection=MultilingualModel(),
     )
