@@ -16,11 +16,38 @@ from livekit.plugins import deepgram, noise_cancellation, openai, silero
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
 from livekit.agents import metrics, MetricsCollectedEvent
 from livekit.agents import mcp
+from livekit.agents import AgentTask
 
 logger = logging.getLogger("agent")
 
 load_dotenv(".env.local")
 
+
+class CollectConsent(AgentTask[bool]):
+    def __init__(self, chat_ctx=None):
+        super().__init__(
+            instructions="""
+            Ask for recording consent and get a clear yes or no answer.
+            Be polite and professional.
+            """,
+            chat_ctx=chat_ctx,
+        )
+
+    async def on_enter(self) -> None:
+        await self.session.generate_reply(instructions="""
+                                          Brief ask for permission to record the call for quality assurance and training purposes.
+                                          Make it clear that they can decline.
+                                          """)
+
+    @function_tool
+    async def consent_given(self) -> None:
+        """Use this when the user gives consent to record."""
+        self.complete(True)
+
+    @function_tool
+    async def consent_denied(self) -> None:
+        """Use this when the user denies consent to record."""
+        self.complete(False)
 
 class Assistant(Agent):
     def __init__(self) -> None:
@@ -34,6 +61,14 @@ class Assistant(Agent):
                 mcp.MCPServerHTTP(url="https://shayne.app/sse"),
             ],
         )
+    
+    async def on_enter(self) -> None:
+        if await CollectConsent(chat_ctx=self.chat_ctx):
+            logger.info("User gave consent to record.")
+            await self.session.generate_reply(instructions="Thank the user for their consent then offer your assistance.")
+        else:
+            logger.info("User did not give consent to record.")
+            await self.session.generate_reply(instructions="Let the user know that the call will not be recorded, then offer your assistance.")
     
     @function_tool
     async def lookup_weather(self, context: RunContext, location: str):
