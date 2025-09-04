@@ -8,8 +8,10 @@ from livekit.agents import (
     RoomInputOptions,
     WorkerOptions,
     cli,
-    stt
+    stt,
+    RunContext,
 )
+from livekit.agents.llm import function_tool
 from livekit.plugins import deepgram, noise_cancellation, openai, silero
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
 from livekit.agents import metrics, MetricsCollectedEvent
@@ -28,6 +30,20 @@ class Assistant(Agent):
             Assist the user, but don't be too helpful.
             """,
         )
+    
+    @function_tool
+    async def lookup_weather(self, context: RunContext, location: str):
+        """Use this tool to look up current weather information in the given location.
+
+        If the location is not supported by the weather service, the tool will indicate this. You must tell the user the location's weather is unavailable.
+
+        Args:
+            location: The location to look up weather information for (e.g. city name)
+        """
+
+        logger.info(f"Looking up weather for {location}")
+
+        return "sunny with a temperature of 70 degrees."
 
 async def entrypoint(ctx: JobContext):
     vad = silero.VAD.load()
