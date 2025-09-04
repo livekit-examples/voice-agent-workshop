@@ -14,7 +14,7 @@ from livekit.agents import (
 from livekit.agents.llm import function_tool
 from livekit.plugins import deepgram, noise_cancellation, openai, silero
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
-from livekit.agents import metrics, MetricsCollectedEvent
+from livekit.agents import metrics, MetricsCollectedEvent, AgentStateChangedEvent
 from livekit.agents import mcp
 from livekit.agents import AgentTask
 
@@ -100,9 +100,14 @@ async def entrypoint(ctx: JobContext):
     )
     
     usage_collector = metrics.UsageCollector()
+    last_eou_metrics: metrics.EOUMetrics | None = None
 
     @session.on("metrics_collected")
     def _on_metrics_collected(ev: MetricsCollectedEvent):
+        nonlocal last_eou_metrics
+        if ev.metrics.type == "eou_metrics":
+            last_eou_metrics = ev.metrics
+        
         metrics.log_metrics(ev.metrics)
         usage_collector.collect(ev.metrics)
 
@@ -111,6 +116,17 @@ async def entrypoint(ctx: JobContext):
         logger.info(f"Usage: {summary}")
 
     ctx.add_shutdown_callback(log_usage)
+    
+    @session.on("agent_state_changed")
+    def _on_agent_state_changed(ev: AgentStateChangedEvent):
+        if (
+            ev.new_state == "speaking"
+            and last_eou_metrics
+            and last_eou_metrics.speech_id == session.current_speech.id
+        ):
+            logger.info(
+                f"Agent response - Time to first audio frame: {ev.created_at - last_eou_metrics.last_speaking_time}"
+            )
     
     await session.start(
         agent=Assistant(),
