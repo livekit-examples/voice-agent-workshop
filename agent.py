@@ -8,7 +8,9 @@ from livekit.agents import (
     RoomInputOptions,
     WorkerOptions,
     cli,
-    stt
+    stt,
+    llm,
+    tts,
 )
 from livekit.plugins import deepgram, noise_cancellation, openai, silero
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
@@ -28,20 +30,33 @@ class Assistant(Agent):
             """,
         )
 
+
 async def entrypoint(ctx: JobContext):
     vad = silero.VAD.load()
-    
+
     session = AgentSession(
-        llm=openai.LLM(model="gpt-4o-mini"),
-        stt=stt.FallbackAdapter([
-            deepgram.STT(model="nova-3", language="multi"),
-            stt.StreamAdapter(stt=openai.STT(model="gpt-4o-transcribe"), vad=vad)
-        ]),
-        tts=openai.TTS(voice="ash"),
+        llm=llm.FallbackAdapter(
+            [
+                openai.LLM(model="gpt-4.1"),
+                openai.LLM(model="gpt-4o-mini"),
+            ]
+        ),
+        stt=stt.FallbackAdapter(
+            [
+                deepgram.STT(model="nova-3", language="multi"),
+                stt.StreamAdapter(stt=openai.STT(model="gpt-4o-transcribe"), vad=vad),
+            ]
+        ),
+        tts=tts.FallbackAdapter(
+            [
+                openai.TTS(voice="ash"),
+                deepgram.TTS(),
+            ]
+        ),
         vad=vad,
         turn_detection=MultilingualModel(),
     )
-    
+
     await session.start(
         agent=Assistant(),
         room=ctx.room,
