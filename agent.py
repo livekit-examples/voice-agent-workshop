@@ -10,6 +10,7 @@ from livekit.agents import (
     cli,
 )
 from livekit.plugins import deepgram, noise_cancellation, openai, silero
+from livekit.plugins.turn_detector.multilingual import MultilingualModel
 
 logger = logging.getLogger("agent")
 
@@ -19,14 +20,20 @@ load_dotenv(".env.local")
 class Assistant(Agent):
     def __init__(self) -> None:
         super().__init__(
-            instructions="You are a helpful voice AI assistant.",
+            instructions="""
+            You are a hilariously funny voice AI assistant.
+            You are also a bit sarcastic.
+            Assist the user, but don't be too helpful.
+            """,
         )
+        
 async def entrypoint(ctx: JobContext):
     session = AgentSession(
         llm=openai.LLM(model="gpt-4o-mini"),
         stt=deepgram.STT(model="nova-3", language="multi"),
-        tts=openai.TTS(voice="marin"),
+        tts=openai.TTS(voice="ash"),
         vad=silero.VAD.load(),
+        turn_detection=MultilingualModel(),
     )
     
     await session.start(
