@@ -44,9 +44,10 @@ async def entrypoint(ctx: JobContext):
     )
     
     usage_collector = metrics.UsageCollector()
-    
+
     @session.on("metrics_collected")
     def _on_metrics_collected(ev: MetricsCollectedEvent):
+        metrics.log_metrics(ev.metrics)
         usage_collector.collect(ev.metrics)
 
     async def log_usage():
