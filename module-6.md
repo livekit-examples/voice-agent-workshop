@@ -50,3 +50,32 @@ Step 3: Start the task in the `Assistant` class's `on_enter` method, then procee
             await self.session.generate_reply(instructions="Let the user know that the call will not be recorded, then offer your assistance.")
     ```
 
+# Add a handoff
+
+In this exercise, we'll add a handoff to the agent.
+
+Step 1: Create another agent to handoff to:
+
+    ```python
+    class Manager(Agent):
+        def __init__(self, chat_ctx=None):
+            super().__init__(
+                instructions="""You are a manager for a team of helpful voice AI assistants. 
+                A customer has been escalated to you.
+                Provide your assistant and be professional.
+                """,
+                tts=openai.TTS(voice="coral"),
+                chat_ctx=chat_ctx,
+            )
+    ```
+
+Step 2: Add the handoff to the `Assistant` class, as a function tool:
+
+    ```python
+    @function_tool
+    async def escalate_to_manager(self, context: RunContext):
+        """Use this tool to escalate the call to the manager, upon user request."""
+        return Manager(chat_ctx=self.chat_ctx), "Escalating to manager..."
+    ```
+
+Now you can ask the assistant to escalate to the manager.

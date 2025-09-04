@@ -83,6 +83,26 @@ class Assistant(Agent):
         logger.info(f"Looking up weather for {location}")
 
         return "sunny with a temperature of 70 degrees."
+    
+    @function_tool
+    async def escalate_to_manager(self, context: RunContext):
+        """Use this tool to escalate the call to the manager, upon user request."""
+        return Manager(chat_ctx=self.chat_ctx), "Escalating to manager..."
+
+
+class Manager(Agent):
+    def __init__(self, chat_ctx=None):
+        super().__init__(
+            instructions="""You are a manager for a team of helpful voice AI assistants. 
+            A customer has been escalated to you.
+            Provide your assistant and be professional.
+            """,
+            tts=openai.TTS(voice="coral"),
+            chat_ctx=chat_ctx,
+        )
+    
+    async def on_enter(self) -> None:
+        await self.session.generate_reply(instructions="Introduce yourself as the manager and offer your assistance.")
 
 async def entrypoint(ctx: JobContext):
     vad = silero.VAD.load()
