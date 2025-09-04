@@ -12,6 +12,7 @@ from livekit.agents import (
 )
 from livekit.plugins import deepgram, noise_cancellation, openai, silero
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
+from livekit.agents import metrics, MetricsCollectedEvent
 
 logger = logging.getLogger("agent")
 
@@ -37,6 +38,18 @@ async def entrypoint(ctx: JobContext):
         vad=vad,
         turn_detection=MultilingualModel(),
     )
+    
+    usage_collector = metrics.UsageCollector()
+    
+    @session.on("metrics_collected")
+    def _on_metrics_collected(ev: MetricsCollectedEvent):
+        usage_collector.collect(ev.metrics)
+
+    async def log_usage():
+        summary = usage_collector.get_summary()
+        logger.info(f"Usage: {summary}")
+
+    ctx.add_shutdown_callback(log_usage)
     
     await session.start(
         agent=Assistant(),
