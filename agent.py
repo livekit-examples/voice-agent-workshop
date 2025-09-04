@@ -21,6 +21,7 @@ class Assistant(Agent):
         super().__init__(
             instructions="You are a helpful voice AI assistant.",
         )
+
 async def entrypoint(ctx: JobContext):
     session = AgentSession(
         llm=openai.LLM(model="gpt-4o-mini"),
