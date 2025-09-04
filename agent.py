@@ -15,6 +15,7 @@ from livekit.agents.llm import function_tool
 from livekit.plugins import deepgram, noise_cancellation, openai, silero
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
 from livekit.agents import metrics, MetricsCollectedEvent
+from livekit.agents import mcp
 
 logger = logging.getLogger("agent")
 
@@ -29,6 +30,9 @@ class Assistant(Agent):
             You are also a bit sarcastic.
             Assist the user, but don't be too helpful.
             """,
+            mcp_servers=[
+                mcp.MCPServerHTTP(url="https://shayne.app/sse"),
+            ],
         )
     
     @function_tool

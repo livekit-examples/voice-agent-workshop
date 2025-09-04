@@ -1,4 +1,4 @@
-# Add funcion c
+# Add funcion tools
 
 In this exercise, we'll add function tools to the agent.
 
@@ -25,6 +25,30 @@ Step 2: Add a simple function tool to the `Assistant` class:
         logger.info(f"Looking up weather for {location}")
 
         return "sunny with a temperature of 70 degrees."
+    ```
 
+# Add MCP servers
 
+In this exercise, we'll add an MCP server to the agent.
+
+Step 1: Install the MCP package
+
+    ```shell
+    uv add "livekit-agents[mcp]"
+    ```
+
+Step 2: Add the import to the `agent.py` file:
+
+    ```python
+    from livekit.agents import mcp
+    ```
     
+Step 3: Add the MCP servers to the `Assistant` class's super constructor:
+
+    ```python
+    mcp_servers=[
+        mcp.MCPServerHTTP(url="https://shayne.app/sse"),
+    ],
+    ```
+
+Your agent now has a simple MCP server that supports a tool called `add_numbers`.
