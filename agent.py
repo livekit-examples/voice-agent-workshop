@@ -65,21 +65,21 @@ async def entrypoint(ctx: JobContext):
     session = AgentSession(
         llm=llm.FallbackAdapter(
             [
-                openai.LLM(model="gpt-4.1"),
-                openai.LLM(model="gpt-4o-mini"),
+                "openai/gpt-4.1-mini",
+                "google/gemini-2.5-flash",
             ]
         ),
         stt=stt.FallbackAdapter(
-            [
-                deepgram.STT(model="nova-3", language="multi"),
-                stt.StreamAdapter(stt=openai.STT(model="gpt-4o-transcribe"), vad=vad),
-            ]
+           [
+               "deepgram/nova-3",
+               "assemblyai/universal-streaming"
+           ]
         ),
         tts=tts.FallbackAdapter(
-            [
-                openai.TTS(voice="ash"),
-                deepgram.TTS(),
-            ]
+           [
+               "cartesia/sonic-2:a167e0f3-df7e-4d52-a9c3-f949145efdab",
+               "inworld/inworld-tts-1",
+           ]
         ),
         vad=vad,
         turn_detection=MultilingualModel(),
