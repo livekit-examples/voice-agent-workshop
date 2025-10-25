@@ -31,6 +31,13 @@ Step 4: Create a `.env.local` file in the root of the project and add your API k
     DEEPGRAM_API_KEY=
     ```
 
+You can load the LiveKit environment automatically using the [LiveKit CLI](https://docs.livekit.io/home/cli/cli-setup):
+
+```bash
+lk cloud auth
+lk app env -w -d .env.local
+```
+
 Step 5: Run your new agent in the console
 
     ```shell
