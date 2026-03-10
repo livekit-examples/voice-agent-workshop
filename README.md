@@ -75,9 +75,8 @@ To setup the Coval connection, follow these steps:
 5. Click the "Connect Agent" button in the top right
 6. Enter a name for your agent
 7. Select "LiveKit" as the simulator type
-8. For token endpoint, use the `sandboxUrl` or your own
-   https://cloud-api.livekit.io/api/sandbox/connection-details`
-9. For the token sandbox id, use the `sandboxId` from your project settings or your own
+8. For token endpoint, use `https://cloud-api.livekit.io/api/sandbox/connection-details`
+9. For the token sandbox id, use the `sandboxId`
 10. Add your LiveKit server URL (it's in your `.env.local` file)
 11. Set content type to `application/json`
 
