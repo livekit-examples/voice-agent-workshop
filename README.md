@@ -16,7 +16,7 @@ To run this agent, you need the following
 Step 1: Copy this repository (Click the green "Use this template" button on GitHub)
 Step 2: Clone your new copy to your local machine
 Step 3: Install dependencies using uv
-    
+
     ```shell
     uv sync
     ```
@@ -46,7 +46,7 @@ Step 5: Run your new agent in the console
 
 ## Web frontend
 
-This agent is compatible with the [LiveKit Agents Playground](https://agents-playground.livekit.io). 
+This agent is compatible with the [LiveKit Agents Playground](https://agents-playground.livekit.io).
 
 To run the agent for the playground, use the `dev` subcomand:
 
@@ -68,28 +68,25 @@ For the Coval sections of the workshop, you need to run your agent in `dev` mode
 
 To setup the Coval connection, follow these steps:
 
-1. Create a [Sandbox token server](https://cloud.livekit.io/projects/p_/sandbox/templates/token-server) in LiveKit Cloud.
-2. Enter a name for your token server (can be anything).
-3. Create the server, dismiss the dialog, and click the "launch" button.
-4. Copy the Sandbox ID from this screen.
-1. Sign in to your [Coval](https://www.coval.dev/) account (you should have an email invite already)
-2. Click the "Agents" menu item in the top left
-3. Click the "Connect Agent" button in the top right
-4. Enter a name for your agent
-5. Select "LiveKit" as the simulator type
-6. For token endpoint, use `
-https://cloud-api.livekit.io/api/sandbox/connection-details`
-7. For Sandbox ID, use the name/ID from your token server
-8. Add your LiveKit server URL (it's in your `.env.local` file)
-9. Set content type to `application/json`
+1. Enable the token server from your project's **Options** at the [Settings](https://cloud.livekit.io/projects/p_/settings/project) page in LiveKit Cloud.
+2. Copy the `sandboxId` & `sandboxUrl` displayed below the toggle.
+3. Sign in to your [Coval](https://www.coval.dev/) account (you should have an email invite already)
+4. Click the "Agents" menu item in the top left
+5. Click the "Connect Agent" button in the top right
+6. Enter a name for your agent
+7. Select "LiveKit" as the simulator type
+8. For token endpoint, use the `sandboxUrl` or your own
+   https://cloud-api.livekit.io/api/sandbox/connection-details`
+9. For the token sandbox id, use the `sandboxId` from your project settings or your own
+10. Add your LiveKit server URL (it's in your `.env.local` file)
+11. Set content type to `application/json`
 
 You should now be ready to test your agent in Coval.
 
 ## Post-workshop
 
-You are welcome to continue working on your agent after the workshop, or start a new one.  Here are some useful documentation links for content not covered in the workshop:
+You are welcome to continue working on your agent after the workshop, or start a new one. Here are some useful documentation links for content not covered in the workshop:
 
 - [Deploying to production](https://docs.livekit.io/agents/ops/deployment/)
 - [Web & mobile starter apps](https://docs.livekit.io/agents/start/frontend/#starter-apps)
 - [Telephony integrations](https://docs.livekit.io/agents/start/telephony/)
-
