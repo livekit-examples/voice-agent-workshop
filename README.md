@@ -68,7 +68,7 @@ For the Coval sections of the workshop, you need to run your agent in `dev` mode
 
 To setup the Coval connection, follow these steps:
 
-1. Enable the token server from your project's **Options** at the [Settings](https://cloud.livekit.io/projects/p_/settings/project) page in LiveKit Cloud.
+1. Enable the token server from your project's **Options** on the [Settings](https://cloud.livekit.io/projects/p_/settings/project) page in LiveKit Cloud.
 2. Copy the `sandboxId` & `sandboxUrl` displayed below the toggle.
 3. Sign in to your [Coval](https://www.coval.dev/) account (you should have an email invite already)
 4. Click the "Agents" menu item in the top left
