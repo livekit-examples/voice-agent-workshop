@@ -1,3 +1,6 @@
+> [!WARNING]
+> This example is archived and no longer maintained. For current examples, see [agent-starter-python](https://github.com/livekit-examples/agent-starter-python).
+
 # LiveKit Voice Agent Workshop
 
 Welcome to the Voice Agent Workshop! In this workshop, you will learn how to build and test a production-ready voice agent using [LiveKit](https://livekit.io) and [Coval](https://coval.dev).
